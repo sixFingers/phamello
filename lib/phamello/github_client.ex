@@ -1,8 +1,6 @@
 defmodule Phamello.GithubClient do
   use HTTPoison.Base
 
-  alias Phamello.User
-
   @site_url "https://api.github.com"
   @authorize_url "https://github.com/login/oauth/authorize"
   @token_url "https://github.com/login/oauth/access_token"
