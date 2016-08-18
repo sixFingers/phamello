@@ -9,7 +9,6 @@ defmodule Phamello.PageController do
   end
 
   def already_authenticated(conn, _params) do
-    conn
-    |> redirect(to: "/app")
+    redirect(conn, to: "/app")
   end
 end

@@ -6,8 +6,7 @@ defmodule Phamello.AuthController do
       handler: __MODULE__
 
   def request(conn, _params) do
-    conn
-    |> redirect(external: GithubClient.authorize_url)
+    redirect(conn, external: GithubClient.authorize_url)
   end
 
   def callback(conn, %{"code" => code}) do
@@ -18,8 +17,7 @@ defmodule Phamello.AuthController do
   end
 
   def already_authenticated(conn, _params) do
-    conn
-    |> redirect(to: "/app")
+    redirect(conn, to: "/app")
   end
 
   defp authentication_complete(conn, %GithubUser{} = user) do

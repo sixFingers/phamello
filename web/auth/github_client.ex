@@ -22,17 +22,13 @@ defmodule Phamello.GithubClient do
     |> parse_response
   end
 
-  def authorize_url do
+  def authorize_url, do:
     <<@authorize_url :: binary, "?", authorize_params :: binary>>
-  end
 
-  defp config do
-    Application.get_env(:phamello, __MODULE__)
-  end
+  defp config, do: Application.get_env(:phamello, __MODULE__)
 
-  defp do_request(method, url) do
+  defp do_request(method, url), do:
     request(method, url, "", @default_headers)
-  end
 
   defp parse_response({:ok, %{body: body}}), do: Poison.decode!(body)
   defp parse_response({:error, _response}), do: {:error, nil}
@@ -42,21 +38,16 @@ defmodule Phamello.GithubClient do
     |> handle_oauth_step
   end
 
-  defp handle_oauth_step(%{"login" => username, "id" => id}) do
+  defp handle_oauth_step(%{"login" => username, "id" => id}), do:
     {:ok, %GithubUser{username: username, github_id: id}}
-  end
 
-  defp handle_oauth_step(_) do
-    {:error, nil}
-  end
+  defp handle_oauth_step(_), do: {:error, nil}
 
-  defp exchange_code_url(code) do
+  defp exchange_code_url(code), do:
     <<@token_url :: binary, "?", exchange_code_params(code) :: binary>>
-  end
 
-  defp user_info_url(token) do
+  defp user_info_url(token), do:
     <<@site_url :: binary, "/user?", user_info_params(token) :: binary>>
-  end
 
   defp authorize_params do
     [client_id: config[:client_id]]

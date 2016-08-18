@@ -12,7 +12,6 @@ defmodule Phamello.SessionController do
   end
 
   def unauthenticated(conn, _params) do
-    conn
-    |> redirect(to: "/")
+    redirect(conn, to: "/")
   end
 end
