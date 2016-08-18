@@ -52,6 +52,7 @@ defmodule Phamello.Web do
       import Phamello.Router.Helpers
       import Phamello.ErrorHelpers
       import Phamello.Gettext
+      import Phamello.ViewHelpers
     end
   end
 

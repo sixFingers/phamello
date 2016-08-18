@@ -1,0 +1,16 @@
+<header class="header">
+  <nav role="navigation">
+    <ul class="nav nav-pills pull-right">
+      <%= if @current_user do %>
+        <li>
+          <%= link "Logout", to: session_path(@conn, :logout), method: :delete %>
+        </li>
+      <%= else %>
+        <li>
+          <%= link "Login with Github", to: auth_path(@conn, :request), method: :get %>
+        </li>
+      <% end %>
+    </ul>
+  </nav>
+  <span class="logo"></span>
+</header>

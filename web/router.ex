@@ -23,7 +23,7 @@ defmodule Phamello.Router do
 
     get "/github", AuthController, :request
     get "/github/callback", AuthController, :callback
-    get "/logout", SessionController, :logout
+    delete "/logout", SessionController, :logout
   end
 
   scope "/app", Phamello do
@@ -33,7 +33,7 @@ defmodule Phamello.Router do
   end
 
   scope "/", Phamello do
-    pipe_through [:browser]
+    pipe_through [:browser, :browser_auth]
 
     get "/", PageController, :welcome
   end
