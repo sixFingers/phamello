@@ -17,3 +17,5 @@ config :phamello, Phamello.Repo,
   database: "phamello_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+import_config "test.secret.exs"
