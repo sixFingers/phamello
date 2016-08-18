@@ -3,10 +3,13 @@ defmodule Phamello.AuthControllerTest do
   use ExUnit.Case, async: false
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
   import Phamello.Factory
-  alias Phamello.GithubClient
+  alias Phamello.{GithubClient, Repo, User}
 
   setup do
-    {:ok, %{user: factory(:user)}}
+    {:ok, %{
+      user: factory(:user),
+      unsaved_user: factory(:unsaved_user)
+    }}
   end
 
   test "GET /auth/github" do
@@ -53,5 +56,17 @@ defmodule Phamello.AuthControllerTest do
     conn = delete(conn, "/auth/logout")
 
     assert redirected_to(conn, 302) =~ "/"
+  end
+
+  test "GET /app gets logged in from database", %{unsaved_user: user} do
+    {:ok, changeset} = Repo.insert(user)
+
+    resource = guardian_login(%User{id: changeset.id})
+    |> bypass_through(Phamello.Router, [:browser, :browser_auth])
+    |> get("/app")
+    |> Guardian.Plug.current_resource
+
+    assert %User{} = resource
+    assert resource.github_id == user.github_id
   end
 end
