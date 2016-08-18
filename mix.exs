@@ -9,6 +9,9 @@ defmodule Phamello.Mixfile do
      compilers: [:phoenix, :gettext] ++ Mix.compilers,
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
+     preferred_cli_env: [
+       vcr: :test, "vcr.delete": :test, "vcr.check": :test, "vcr.show": :test
+     ],
      aliases: aliases(),
      deps: deps()]
   end
@@ -19,7 +22,7 @@ defmodule Phamello.Mixfile do
   def application do
     [mod: {Phamello, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex]]
+                    :phoenix_ecto, :postgrex, :httpoison]]
   end
 
   # Specifies which paths to compile per environment.
@@ -37,7 +40,9 @@ defmodule Phamello.Mixfile do
      {:phoenix_html, "~> 2.6"},
      {:phoenix_live_reload, "~> 1.0", only: :dev},
      {:gettext, "~> 0.11"},
-     {:cowboy, "~> 1.0"}]
+     {:cowboy, "~> 1.0"},
+     {:httpoison, "~> 0.9.0"},
+     {:exvcr, "~> 0.7", only: :test}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
