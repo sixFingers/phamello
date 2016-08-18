@@ -20,7 +20,7 @@ defmodule Phamello.ConnCase do
       # Import conveniences for testing with connections
       use Phoenix.ConnTest
 
-      alias Phamello.Repo
+      alias Phamello.{Repo, User}
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
@@ -29,6 +29,21 @@ defmodule Phamello.ConnCase do
 
       # The default endpoint for testing
       @endpoint Phamello.Endpoint
+
+      def guardian_login(%User{} = user), do: guardian_login(build_conn(), user, :token, [])
+      def guardian_login(%User{} = user, token), do: guardian_login(build_conn(), user, token, [])
+      def guardian_login(%User{} = user, token, opts), do: guardian_login(build_conn(), user, token, opts)
+
+      def guardian_login(%Plug.Conn{} = conn, user), do: guardian_login(conn, user, :token, [])
+      def guardian_login(%Plug.Conn{} = conn, user, token), do: guardian_login(conn, user, token, [])
+      def guardian_login(%Plug.Conn{} = conn, user, token, opts) do
+        conn
+        |> bypass_through(Phamello.Router, [:browser])
+        |> get("/")
+        |> Guardian.Plug.sign_in(user, token, opts)
+        |> send_resp(200, "Session flushed")
+        |> recycle()
+      end
     end
   end
 

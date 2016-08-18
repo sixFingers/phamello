@@ -42,7 +42,8 @@ defmodule Phamello.Mixfile do
      {:gettext, "~> 0.11"},
      {:cowboy, "~> 1.0"},
      {:httpoison, "~> 0.9.0"},
-     {:exvcr, "~> 0.7", only: :test}]
+     {:exvcr, "~> 0.7", only: :test},
+     {:guardian, "~> 0.12.0"}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

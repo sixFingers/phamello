@@ -2,8 +2,12 @@ defmodule Phamello.AuthControllerTest do
   use Phamello.ConnCase
   use ExUnit.Case, async: false
   use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
-
+  import Phamello.Factory
   alias Phamello.GithubClient
+
+  setup do
+    {:ok, %{user: factory(:user)}}
+  end
 
   test "GET /auth/github" do
     use_cassette "github_client_exchange_code" do
@@ -31,5 +35,17 @@ defmodule Phamello.AuthControllerTest do
       response = GithubClient.get_user("5f3a41asdf195b58b6f99cd9397826b1b0cd5c3")
       refute match? %{"login" => _login}, response
     end
+  end
+
+  test "GET /auth/github being logged in", %{user: user} do
+    conn = guardian_login(user)
+    |> get("/auth/github")
+
+    assert redirected_to(conn) =~ "/app"
+  end
+
+  test "GET /app without being logged in", %{conn: conn} do
+    conn = get(conn, "/app")
+    assert html_response(conn, 401)
   end
 end
