@@ -1,0 +1,18 @@
+<h2>Show picture</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @picture.name %>
+  </li>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @picture.description %>
+  </li>
+
+</ul>
+
+<%= link "Edit", to: picture_path(@conn, :edit, @picture) %>
+<%= link "Back", to: picture_path(@conn, :index) %>

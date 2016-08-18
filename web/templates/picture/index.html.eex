@@ -1,0 +1,28 @@
+<h2>Listing pictures</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for picture <- @pictures do %>
+    <tr>
+      <td><%= picture.name %></td>
+      <td><%= picture.description %></td>
+
+      <td class="text-right">
+        <%= link "Show", to: picture_path(@conn, :show, picture), class: "btn btn-default btn-xs" %>
+        <%= link "Edit", to: picture_path(@conn, :edit, picture), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: picture_path(@conn, :delete, picture), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New picture", to: picture_path(@conn, :new) %>
