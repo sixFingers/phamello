@@ -1,0 +1,39 @@
+[
+  {
+    "request": {
+      "body": "",
+      "headers": {
+        "Accept": "application/json"
+      },
+      "method": "post",
+      "options": [],
+      "request_body": "",
+      "url": "https://github.com/login/oauth/access_token?code=3d78e36b393e44ecbbd5&client_id=292864d60402f6758f80&client_secret=8bab86d58063e60e5ac2cb56573034925fdb9fb0"
+    },
+    "response": {
+      "body": "{\"access_token\":\"5f3a41f0c5b195b58b6f99cd9397826b1b0cd5c3\",\"token_type\":\"bearer\",\"scope\":\"public_repo,user\"}",
+      "headers": {
+        "Server": "GitHub.com",
+        "Date": "Thu, 18 Aug 2016 17:16:02 GMT",
+        "Content-Type": "application/json; charset=utf-8",
+        "Transfer-Encoding": "chunked",
+        "Status": "200 OK",
+        "Cache-Control": "no-cache",
+        "Vary": "X-PJAX",
+        "X-UA-Compatible": "IE=Edge,chrome=1",
+        "X-Request-Id": "7930edaacc59ff613df527c3855c24c5",
+        "X-Runtime": "0.028670",
+        "Content-Security-Policy": "default-src 'none'; base-uri 'self'; block-all-mixed-content; child-src render.githubusercontent.com; connect-src 'self' uploads.github.com status.github.com api.github.com www.google-analytics.com github-cloud.s3.amazonaws.com wss://live.github.com; font-src assets-cdn.github.com; form-action 'self' github.com gist.github.com; frame-ancestors 'none'; frame-src render.githubusercontent.com; img-src 'self' data: assets-cdn.github.com identicons.github.com www.google-analytics.com collector.githubapp.com *.gravatar.com *.wp.com github-cloud.s3.amazonaws.com *.githubusercontent.com; media-src 'none'; object-src assets-cdn.github.com; plugin-types application/x-shockwave-flash; script-src assets-cdn.github.com; style-src 'unsafe-inline' assets-cdn.github.com",
+        "Strict-Transport-Security": "max-age=31536000; includeSubdomains; preload",
+        "Public-Key-Pins": "max-age=5184000; pin-sha256=\"WoiWRyIOVNa9ihaBciRSC7XHjliYS9VwUGOIud4PB18=\"; pin-sha256=\"RRM1dGqnDFsCJXBTHky16vi1obOlCgFFn/yOhI/y+ho=\"; pin-sha256=\"k2v657xBsOVe1PQRwOsHsw3bsGT2VzIqz5K+59sNQws=\"; pin-sha256=\"K87oWBWM9UZfyddvDfoxL+8lpNyoUB2ptGtn0fv6G2Q=\"; pin-sha256=\"IQBnNBEiFuhj+8x6X8XLgh01V9Ic5/V3IRQLNFFc7v4=\"; pin-sha256=\"iie1VXtL7HzAMF+/PVPR9xzT80kQxdZeJ+zduCB3uj0=\"; pin-sha256=\"LvRiGEjRqfzurezaWuj8Wie2gyHMrW5Q06LspMnox7A=\"; includeSubDomains",
+        "X-Content-Type-Options": "nosniff",
+        "X-Frame-Options": "deny",
+        "X-XSS-Protection": "1; mode=block",
+        "X-Served-By": "926b734ea1992f8ee1f88ab967a93dac",
+        "X-GitHub-Request-Id": "514366AC:3F4B:394590A:57B5ED52"
+      },
+      "status_code": 200,
+      "type": "ok"
+    }
+  }
+]

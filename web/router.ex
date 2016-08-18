@@ -13,6 +13,13 @@ defmodule Phamello.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/auth", Phamello do
+    pipe_through :browser
+
+    get "/github", AuthController, :request
+    get "/github/callback", AuthController, :callback
+  end
+
   scope "/", Phamello do
     pipe_through :browser # Use the default browser stack
 
