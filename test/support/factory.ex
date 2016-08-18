@@ -8,12 +8,4 @@ defmodule Phamello.Factory do
       github_id: 123456
     }
   end
-
-  def factory(:unsaved_user) do
-    %User{
-      id: 99,
-      username: "ginger",
-      github_id: 987654
-    }
-  end
 end
