@@ -1,6 +1,6 @@
 defmodule Phamello.AuthController do
   use Phamello.Web, :controller
-  alias Phamello.{GithubClient, User}
+  alias Phamello.{GithubClient, GithubUser, User}
 
   plug Guardian.Plug.EnsureNotAuthenticated,
       handler: __MODULE__
@@ -12,7 +12,7 @@ defmodule Phamello.AuthController do
 
   def callback(conn, %{"code" => code}) do
     case GithubClient.authenticate(code) do
-      {:ok, user} -> authentication_success(conn, user)
+      {:ok, user} -> authentication_complete(conn, user)
       {:error, _} -> authentication_error(conn)
     end
   end
@@ -22,10 +22,11 @@ defmodule Phamello.AuthController do
     |> redirect(to: "/app")
   end
 
-  defp authentication_success(conn, %{} = user) do
-    case Repo.get_by(User, github_id: user.github_id) do
-      %User{} = user -> logged_in(conn, user)
-      nil -> validate_new_user(conn, user)
+  defp authentication_complete(conn, %GithubUser{} = user) do
+    case GithubUser.find_or_create(user) do
+      {:logged_in, user} -> authentication_success(conn, user)
+      {:registered, user} -> registration_success(conn, user)
+      {:error, _} -> authentication_error(conn)
     end
   end
 
@@ -36,27 +37,11 @@ defmodule Phamello.AuthController do
     |> redirect(to: "/")
   end
 
-  defp logged_in(conn, user) do
+  defp authentication_success(conn, user) do
     conn
     |> Guardian.Plug.sign_in(user)
     |> put_flash(:info, "Authenticated succesfully")
     |> redirect(to: "/app")
-  end
-
-  defp validate_new_user(conn, user) do
-    changeset = User.creation_changeset(%User{}, user)
-
-    case changeset.valid? do
-      true -> create_user(conn, changeset)
-      false -> authentication_error(conn)
-    end
-  end
-
-  defp create_user(conn, %Ecto.Changeset{} = changeset) do
-    case Repo.insert(changeset) do
-      {:ok, %User{} = user} -> registration_success(conn, user)
-      {:error, _} -> authentication_error(conn)
-    end
   end
 
   defp registration_success(conn, %User{} = user) do
