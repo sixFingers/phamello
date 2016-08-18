@@ -4,8 +4,4 @@ defmodule Phamello.PageController do
   def welcome(conn, _params) do
     render(conn, "index.html")
   end
-
-  def application(conn, _params) do
-    render(conn, "index.html")
-  end
 end

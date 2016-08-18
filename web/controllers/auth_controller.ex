@@ -2,6 +2,9 @@ defmodule Phamello.AuthController do
   use Phamello.Web, :controller
   alias Phamello.{GithubClient, User}
 
+  plug Guardian.Plug.EnsureNotAuthenticated,
+      handler: __MODULE__
+
   def request(conn, _params) do
     conn
     |> redirect(external: GithubClient.authorize_url)
@@ -14,23 +17,9 @@ defmodule Phamello.AuthController do
     end
   end
 
-  def unauthenticated(conn, _params) do
-    conn
-    |> put_status(401)
-    |> put_flash(:error, "Authentication required")
-    |> redirect(to: "/")
-  end
-
   def already_authenticated(conn, _params) do
     conn
     |> redirect(to: "/app")
-  end
-
-  def logout(conn, _params) do
-    conn
-    |> Guardian.Plug.sign_out
-    |> put_flash(:info, "Logged out")
-    |> redirect(to: "/")
   end
 
   defp authentication_success(conn, %{} = user) do

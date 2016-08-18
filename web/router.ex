@@ -14,37 +14,22 @@ defmodule Phamello.Router do
     plug Guardian.Plug.LoadResource
   end
 
-  pipeline :authenticated_only do
-    plug Guardian.Plug.EnsureAuthenticated,
-      handler: Phamello.AuthController
-  end
-
-  pipeline :not_authenticated_only do
-    plug Guardian.Plug.EnsureNotAuthenticated,
-      handler: Phamello.AuthController
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
   end
 
   scope "/auth", Phamello do
-    pipe_through [:browser, :browser_auth, :authenticated_only]
-
-    get "/logout", AuthController, :logout
-  end
-
-  scope "/auth", Phamello do
-    pipe_through [:browser, :browser_auth, :not_authenticated_only]
+    pipe_through [:browser, :browser_auth]
 
     get "/github", AuthController, :request
     get "/github/callback", AuthController, :callback
+    get "/logout", SessionController, :logout
   end
 
   scope "/app", Phamello do
-    pipe_through [:browser, :browser_auth, :authenticated_only]
+    pipe_through [:browser, :browser_auth]
 
-    get "/", PageController, :application
+    get "/", ApplicationController, :index
   end
 
   scope "/", Phamello do

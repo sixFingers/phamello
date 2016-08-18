@@ -52,6 +52,6 @@ defmodule Phamello.AuthControllerTest do
   test "GET /logout without being logged in", %{conn: conn} do
     conn = get(conn, "/auth/logout")
 
-    assert redirected_to(conn, 401) =~ "/"
+    assert redirected_to(conn, 302) =~ "/"
   end
 end
