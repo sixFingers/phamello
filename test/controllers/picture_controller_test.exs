@@ -1,9 +1,17 @@
 defmodule Phamello.PictureControllerTest do
   use Phamello.ConnCase
+  import Phamello.Factory
+  alias Phamello.{Picture, Repo, User}
 
-  alias Phamello.Picture
-  @valid_attrs %{description: "some content", name: "some content"}
   @invalid_attrs %{}
+
+  setup do
+    {:ok, %{
+      picture_map: factory(:picture_map),
+      conn: guardian_login(factory(:user))
+        |> guardian_impersonate(factory(:user))
+    }}
+  end
 
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, picture_path(conn, :index)
@@ -15,10 +23,10 @@ defmodule Phamello.PictureControllerTest do
     assert html_response(conn, 200) =~ "New picture"
   end
 
-  test "creates resource and redirects when data is valid", %{conn: conn} do
-    conn = post conn, picture_path(conn, :create), picture: @valid_attrs
+  test "creates resource and redirects when data is valid", %{conn: conn, picture_map: picture_map} do
+    conn = post conn, picture_path(conn, :create), picture: picture_map
     assert redirected_to(conn) == picture_path(conn, :index)
-    assert Repo.get_by(Picture, @valid_attrs)
+    assert Repo.get_by(Picture, Map.take(picture_map, [:name, :description]))
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do
@@ -44,11 +52,11 @@ defmodule Phamello.PictureControllerTest do
     assert html_response(conn, 200) =~ "Edit picture"
   end
 
-  test "updates chosen resource and redirects when data is valid", %{conn: conn} do
-    picture = Repo.insert! %Picture{}
-    conn = put conn, picture_path(conn, :update, picture), picture: @valid_attrs
+  test "updates chosen resource and redirects when data is valid", %{conn: conn, picture_map: picture_map} do
+    picture = Repo.insert! struct(Picture, picture_map)
+    conn = put conn, picture_path(conn, :update, picture), picture: picture_map
     assert redirected_to(conn) == picture_path(conn, :show, picture)
-    assert Repo.get_by(Picture, @valid_attrs)
+    assert Repo.get_by(Picture, Map.take(picture, [:name, :description]))
   end
 
   test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do

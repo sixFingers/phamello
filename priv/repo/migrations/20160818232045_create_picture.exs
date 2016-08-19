@@ -5,6 +5,7 @@ defmodule Phamello.Repo.Migrations.CreatePicture do
     create table(:pictures) do
       add :name, :string
       add :description, :string
+      add :local_url, :string
 
       timestamps()
     end

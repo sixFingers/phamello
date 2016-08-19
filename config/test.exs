@@ -18,4 +18,7 @@ config :phamello, Phamello.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
+config :phamello, Phamello.PictureUploader,
+  storage_path: "fixture/storage"
+
 import_config "test.secret.exs"

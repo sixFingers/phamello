@@ -1,6 +1,5 @@
 defmodule Phamello.User do
   use Phamello.Web, :model
-  alias Phamello.Repo
 
   schema "users" do
     field :username, :string

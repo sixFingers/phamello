@@ -62,7 +62,6 @@ defmodule Phamello.AuthControllerTest do
     {:ok, changeset} = Repo.insert(user)
 
     resource = guardian_login(%User{id: changeset.id})
-    |> bypass_through(Phamello.Router, [:browser, :browser_auth])
     |> get("/app")
     |> Guardian.Plug.current_resource
 

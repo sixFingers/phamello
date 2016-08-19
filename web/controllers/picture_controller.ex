@@ -1,7 +1,9 @@
 defmodule Phamello.PictureController do
   use Phamello.Web, :controller
+  alias Phamello.{Picture, PictureUploader}
 
-  alias Phamello.Picture
+  plug Guardian.Plug.EnsureAuthenticated,
+      handler: __MODULE__
 
   def index(conn, _params) do
     pictures = Repo.all(Picture)
@@ -15,6 +17,7 @@ defmodule Phamello.PictureController do
 
   def create(conn, %{"picture" => picture_params}) do
     changeset = Picture.changeset(%Picture{}, picture_params)
+    |> PictureUploader.persist_changeset(conn, picture_params)
 
     case Repo.insert(changeset) do
       {:ok, _picture} ->
@@ -61,5 +64,12 @@ defmodule Phamello.PictureController do
     conn
     |> put_flash(:info, "Picture deleted successfully.")
     |> redirect(to: picture_path(conn, :index))
+  end
+
+  def unauthenticated(conn, _params) do
+    conn
+    |> put_status(401)
+    |> put_flash(:error, "Authentication required")
+    |> redirect(to: "/")
   end
 end

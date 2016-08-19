@@ -1,13 +1,18 @@
 defmodule Phamello.PictureTest do
   use Phamello.ModelCase
-
+  import Phamello.Factory
   alias Phamello.Picture
 
-  @valid_attrs %{description: "some content", name: "some content"}
   @invalid_attrs %{}
 
-  test "changeset with valid attributes" do
-    changeset = Picture.changeset(%Picture{}, @valid_attrs)
+  setup do
+    {:ok, %{
+      picture_map: factory(:picture_map),
+    }}
+  end
+
+  test "changeset with valid attributes", %{picture_map: picture_map} do
+    changeset = Picture.changeset(%Picture{}, picture_map)
     assert changeset.valid?
   end
 

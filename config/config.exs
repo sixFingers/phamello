@@ -32,6 +32,14 @@ config :guardian, Guardian,
   secret_key: System.get_env("GUARDIAN_SECRET_KEY"),
   serializer: Phamello.GuardianSerializer
 
+config :phamello, Phamello.PictureUploader,
+  storage_path: System.get_env("IMAGE_STORAGE_FOLDER")
+
+config :phamello, Phamello.S3Uploader,
+  aws_access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
+  aws_secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
+  bucket_name: System.get_env("IMAGE_STORAGE_BUCKET")
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{Mix.env}.exs"

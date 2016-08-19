@@ -15,4 +15,19 @@ defmodule Phamello.Factory do
       github_id: 987654
     }
   end
+
+  def factory(:picture_map) do
+    %{
+      name: "McGyver",
+      description: "Great show",
+      image: factory(:image)
+    }
+  end
+
+  def factory(:image) do
+    %Plug.Upload{
+      path: "fixture/images/face.jpg",
+      filename: "face.jpg"
+    }
+  end
 end

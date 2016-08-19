@@ -38,11 +38,16 @@ defmodule Phamello.ConnCase do
       def guardian_login(%Plug.Conn{} = conn, user, token), do: guardian_login(conn, user, token, [])
       def guardian_login(%Plug.Conn{} = conn, user, token, opts) do
         conn
-        |> bypass_through(Phamello.Router, [:browser])
+        |> bypass_through(Phamello.Router, [:browser, :browser_auth])
         |> get("/")
         |> Guardian.Plug.sign_in(user, token, opts)
         |> send_resp(200, "Session flushed")
         |> recycle()
+      end
+
+      def guardian_impersonate(%Plug.Conn{} = conn, %User{} = user) do
+        conn
+        |> Guardian.Plug.set_current_resource(user)
       end
     end
   end
