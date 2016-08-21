@@ -4,7 +4,7 @@ defmodule Phamello.GithubUser do
   defstruct [:username, :github_id]
 
   def find_or_create(%__MODULE__{} = github_user) do
-    case Repo.get_by(User, github_user.github_id) do
+    case Repo.get_by(User, github_id: github_user.github_id) do
       %User{} = user -> {:logged_in, user}
       nil -> validate_new_user(github_user)
     end
