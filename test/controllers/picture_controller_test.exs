@@ -6,10 +6,13 @@ defmodule Phamello.PictureControllerTest do
   @invalid_attrs %{}
 
   setup do
+    user = factory(:user)
+
     {:ok, %{
       picture_map: factory(:picture_map),
-      conn: guardian_login(factory(:user))
-        |> guardian_impersonate(factory(:user))
+      conn: guardian_login(user)
+        |> guardian_impersonate(user),
+      user: user
     }}
   end
 
@@ -26,7 +29,10 @@ defmodule Phamello.PictureControllerTest do
   test "creates resource and redirects when data is valid", %{conn: conn, picture_map: picture_map} do
     conn = post conn, picture_path(conn, :create), picture: picture_map
     assert redirected_to(conn) == picture_path(conn, :index)
-    assert Repo.get_by(Picture, Map.take(picture_map, [:name, :description]))
+
+    picture = Repo.get_by(Picture, Map.take(picture_map, [:name, :description]))
+    assert picture
+    assert File.exists?(picture.local_url)
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do

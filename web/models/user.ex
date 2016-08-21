@@ -4,6 +4,9 @@ defmodule Phamello.User do
   schema "users" do
     field :username, :string
     field :github_id, :integer
+
+    has_many :pictures, Phamello.Picture
+
     timestamps()
   end
 

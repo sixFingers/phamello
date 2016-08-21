@@ -5,8 +5,9 @@ defmodule Phamello.Picture do
     field :name, :string
     field :description, :string
     field :local_url, :string
-
     field :image, :any, virtual: true
+
+    belongs_to :user, Phamello.User
 
     timestamps()
   end
