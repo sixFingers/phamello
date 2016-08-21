@@ -12,17 +12,17 @@ defmodule Phamello.PictureController do
   end
 
   def new(conn, _params, user, _claims) do
-    changeset = Picture.changeset(%Picture{})
+    changeset = Picture.create_changeset(%Picture{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"picture" => picture_params}, user, _claims) do
-    changeset = Picture.changeset(%Picture{user: user}, picture_params)
+    changeset = Picture.create_changeset(%Picture{user: user}, picture_params)
     changeset = changeset |> PictureUploader.with_local_storage
 
     case Repo.insert(changeset) do
       {:ok, picture} ->
-        # PictureWorker.handle_picture(picture)
+        PictureWorker.handle_picture(picture)
 
         conn
         |> put_flash(:info, "Picture created successfully.")
@@ -39,13 +39,13 @@ defmodule Phamello.PictureController do
 
   def edit(conn, %{"id" => id}, user, _claims) do
     picture = Repo.get!(Picture, id)
-    changeset = Picture.changeset(picture)
+    changeset = Picture.update_changeset(picture)
     render(conn, "edit.html", picture: picture, changeset: changeset)
   end
 
   def update(conn, %{"id" => id, "picture" => picture_params}, user, _claims) do
     picture = Repo.get!(Picture, id)
-    changeset = Picture.changeset(picture, picture_params)
+    changeset = Picture.update_changeset(picture, picture_params)
 
     case Repo.update(changeset) do
       {:ok, picture} ->

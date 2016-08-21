@@ -35,7 +35,7 @@ config :guardian, Guardian,
 config :phamello, Phamello.PictureUploader,
   storage_path: System.get_env("IMAGE_STORAGE_FOLDER")
 
-config :phamello, Phamello.S3Uploader,
+config :phamello, :s3_client,
   aws_access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
   aws_secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
   bucket_name: System.get_env("IMAGE_STORAGE_BUCKET")

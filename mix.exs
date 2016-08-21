@@ -22,7 +22,7 @@ defmodule Phamello.Mixfile do
   def application do
     [mod: {Phamello, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :httpoison]]
+                    :phoenix_ecto, :postgrex, :httpoison, :ssl, :erlcloud]]
   end
 
   # Specifies which paths to compile per environment.
@@ -43,7 +43,9 @@ defmodule Phamello.Mixfile do
      {:cowboy, "~> 1.0"},
      {:httpoison, "~> 0.9.0"},
      {:exvcr, "~> 0.7", only: :test},
-     {:guardian, "~> 0.12.0"}]
+     {:guardian, "~> 0.12.0"},
+     {:erlcloud, "~> 0.13.6"},
+     {:jsx, "~> 2.8.0", override: true}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.
