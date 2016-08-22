@@ -1,4 +1,4 @@
-defmodule Phamello.PictureTasks do
+defmodule Phamello.S3Tasks do
   alias Phamello.{Picture, S3Client}
 
   def upload_to_s3(pid, client, bucket, %Picture{} = picture) do

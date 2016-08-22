@@ -1,6 +1,6 @@
 defmodule Phamello.PictureWorker do
   use GenServer
-  alias Phamello.{Repo, Picture, S3Client, PictureTasks}
+  alias Phamello.{Repo, Picture, S3Client, S3Tasks}
   require Logger
 
   @s3_upload_error_message "Error uploading to S3 with image id:"
@@ -26,7 +26,7 @@ defmodule Phamello.PictureWorker do
 
     Task.Supervisor.start_child(
       PictureSupervisor,
-      PictureTasks,
+      S3Tasks,
       :upload_to_s3,
       [__MODULE__, client, S3Client.bucket, picture]
     )
