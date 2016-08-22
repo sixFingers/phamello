@@ -10,7 +10,7 @@ defmodule Phamello.S3Tasks do
     {:ok, binary} = File.read(picture.local_url)
 
     case S3Client.put_object(bucket, path, binary, client) do
-      {:error, _} -> bail_s3_upload(pid)
+      {:error, _} -> bail_s3_upload(pid, picture.id)
       {:ok, url} -> confirm_s3_upload(pid, picture.id, url)
     end
   end
@@ -19,7 +19,7 @@ defmodule Phamello.S3Tasks do
     GenServer.cast(pid, {:s3_upload_complete, picture_id, url})
   end
 
-  defp bail_s3_upload(pid) do
-    GenServer.cast(pid, {:s3_upload_error, nil})
+  defp bail_s3_upload(pid, picture_id) do
+    GenServer.cast(pid, {:s3_upload_error, picture_id})
   end
 end
