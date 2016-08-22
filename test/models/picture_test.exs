@@ -12,12 +12,12 @@ defmodule Phamello.PictureTest do
   end
 
   test "changeset with valid attributes", %{picture_map: picture_map} do
-    changeset = Picture.changeset(%Picture{}, picture_map)
+    changeset = Picture.insert_changeset(%Picture{}, picture_map)
     assert changeset.valid?
   end
 
   test "changeset with invalid attributes" do
-    changeset = Picture.changeset(%Picture{}, @invalid_attrs)
+    changeset = Picture.insert_changeset(%Picture{}, @invalid_attrs)
     refute changeset.valid?
   end
 end

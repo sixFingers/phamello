@@ -32,8 +32,9 @@ config :guardian, Guardian,
   secret_key: System.get_env("GUARDIAN_SECRET_KEY"),
   serializer: Phamello.GuardianSerializer
 
-config :phamello, Phamello.PictureUploader,
-  storage_path: System.get_env("IMAGE_STORAGE_FOLDER")
+config :phamello, Phamello.Picture,
+  storage_path: System.get_env("IMAGE_STORAGE_FOLDER"),
+  max_file_size: 5_000_000
 
 config :phamello, :s3_client,
   aws_access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),

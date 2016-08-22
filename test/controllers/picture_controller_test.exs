@@ -6,12 +6,12 @@ defmodule Phamello.PictureControllerTest do
   @invalid_attrs %{}
 
   setup do
-    user = factory(:user)
+    user = factory(:unsaved_user) |> Repo.insert!
 
     {:ok, %{
       picture_map: factory(:picture_map),
-      conn: guardian_login(user)
-        |> guardian_impersonate(user),
+      big_picture_map: factory(:picture_map, size: :big),
+      conn: guardian_login(user),
       user: user
     }}
   end
@@ -40,10 +40,30 @@ defmodule Phamello.PictureControllerTest do
     assert html_response(conn, 200) =~ "New picture"
   end
 
-  test "shows chosen resource", %{conn: conn} do
-    picture = Repo.insert! %Picture{}
+  test "does not create resource and renders errors when image size is too big", %{conn: conn, big_picture_map: picture_map} do
+    conn = post conn, picture_path(conn, :create), picture: picture_map
+    assert html_response(conn, 200) =~ "New picture"
+  end
+
+  test "shows chosen resource", %{conn: conn, user: user, picture_map: picture_map} do
+    picture = build_assoc(user, :pictures)
+    |> Picture.create_changeset(picture_map)
+    |> Repo.insert!
+
     conn = get conn, picture_path(conn, :show, picture)
     assert html_response(conn, 200) =~ "Show picture"
+  end
+
+  test "renders 404 when showing resource not belonging to user", %{conn: conn, picture_map: picture_map} do
+    user = factory(:user) |> Repo.insert!
+
+    picture = build_assoc(user, :pictures)
+    |> Picture.create_changeset(picture_map)
+    |> Repo.insert!
+
+    assert_error_sent 404, fn ->
+      get conn, picture_path(conn, :show, picture)
+    end
   end
 
   test "renders page not found when id is nonexistent", %{conn: conn} do
@@ -52,29 +72,25 @@ defmodule Phamello.PictureControllerTest do
     end
   end
 
-  test "renders form for editing chosen resource", %{conn: conn} do
-    picture = Repo.insert! %Picture{}
-    conn = get conn, picture_path(conn, :edit, picture)
-    assert html_response(conn, 200) =~ "Edit picture"
-  end
+  test "deletes chosen resource", %{conn: conn, user: user, picture_map: picture_map} do
+    picture = build_assoc(user, :pictures)
+    |> Picture.create_changeset(picture_map)
+    |> Repo.insert!
 
-  test "updates chosen resource and redirects when data is valid", %{conn: conn, picture_map: picture_map} do
-    picture = Repo.insert! struct(Picture, picture_map)
-    conn = put conn, picture_path(conn, :update, picture), picture: picture_map
-    assert redirected_to(conn) == picture_path(conn, :show, picture)
-    assert Repo.get_by(Picture, Map.take(picture, [:name, :description]))
-  end
-
-  test "does not update chosen resource and renders errors when data is invalid", %{conn: conn} do
-    picture = Repo.insert! %Picture{}
-    conn = put conn, picture_path(conn, :update, picture), picture: @invalid_attrs
-    assert html_response(conn, 200) =~ "Edit picture"
-  end
-
-  test "deletes chosen resource", %{conn: conn} do
-    picture = Repo.insert! %Picture{}
     conn = delete conn, picture_path(conn, :delete, picture)
     assert redirected_to(conn) == picture_path(conn, :index)
     refute Repo.get(Picture, picture.id)
+  end
+
+  test "renders 404 when deleting resource not belonging to user", %{conn: conn, picture_map: picture_map} do
+    user = factory(:user) |> Repo.insert!
+
+    picture = build_assoc(user, :pictures)
+    |> Picture.create_changeset(picture_map)
+    |> Repo.insert!
+
+    assert_error_sent 404, fn ->
+      delete conn, picture_path(conn, :delete, picture)
+    end
   end
 end

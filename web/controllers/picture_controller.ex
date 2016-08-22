@@ -2,23 +2,24 @@ defmodule Phamello.PictureController do
   use Phamello.Web, :controller
   use Guardian.Phoenix.Controller
   alias Phamello.{Picture, PictureUploader, PictureWorker}
+  import Ecto
 
   plug Guardian.Plug.EnsureAuthenticated,
       handler: __MODULE__
 
   def index(conn, _params, user, _claims) do
-    pictures = Repo.all(Picture)
+    pictures = Repo.all(assoc(user, :pictures))
     render(conn, "index.html", pictures: pictures)
   end
 
-  def new(conn, _params, user, _claims) do
-    changeset = Picture.create_changeset(%Picture{})
+  def new(conn, _params, _user, _claims) do
+    changeset = Picture.insert_changeset(%Picture{})
     render(conn, "new.html", changeset: changeset)
   end
 
   def create(conn, %{"picture" => picture_params}, user, _claims) do
-    changeset = Picture.create_changeset(%Picture{user: user}, picture_params)
-    changeset = changeset |> PictureUploader.with_local_storage
+    changeset = build_assoc(user, :pictures)
+    |> Picture.create_changeset(picture_params)
 
     case Repo.insert(changeset) do
       {:ok, picture} ->
@@ -33,35 +34,12 @@ defmodule Phamello.PictureController do
   end
 
   def show(conn, %{"id" => id}, user, _claims) do
-    picture = Repo.get!(Picture, id)
+    picture = Repo.get!(assoc(user, :pictures), id)
     render(conn, "show.html", picture: picture)
   end
 
-  def edit(conn, %{"id" => id}, user, _claims) do
-    picture = Repo.get!(Picture, id)
-    changeset = Picture.update_changeset(picture)
-    render(conn, "edit.html", picture: picture, changeset: changeset)
-  end
-
-  def update(conn, %{"id" => id, "picture" => picture_params}, user, _claims) do
-    picture = Repo.get!(Picture, id)
-    changeset = Picture.update_changeset(picture, picture_params)
-
-    case Repo.update(changeset) do
-      {:ok, picture} ->
-        conn
-        |> put_flash(:info, "Picture updated successfully.")
-        |> redirect(to: picture_path(conn, :show, picture))
-      {:error, changeset} ->
-        render(conn, "edit.html", picture: picture, changeset: changeset)
-    end
-  end
-
   def delete(conn, %{"id" => id}, user, _claims) do
-    picture = Repo.get!(Picture, id)
-
-    # Here we use delete! (with a bang) because we expect
-    # it to always work (and if it does not, it will raise).
+    picture = Repo.get!(assoc(user, :pictures), id)
     Repo.delete!(picture)
 
     conn

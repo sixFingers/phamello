@@ -18,7 +18,8 @@ config :phamello, Phamello.Repo,
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
-config :phamello, Phamello.PictureUploader,
-  storage_path: "fixture/storage"
+config :phamello, Phamello.Picture,
+  storage_path: "fixture/storage",
+  max_file_size: 200_000
 
 import_config "test.secret.exs"
