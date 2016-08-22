@@ -41,4 +41,7 @@ config :phamello, Phamello.Repo,
   hostname: "localhost",
   pool_size: 10
 
+config :phamello, Phamello.Picture,
+  storage_path: "storage"
+
 import_config "dev.secret.exs"
