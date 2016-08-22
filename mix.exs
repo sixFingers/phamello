@@ -45,7 +45,8 @@ defmodule Phamello.Mixfile do
      {:exvcr, "~> 0.7", only: :test},
      {:guardian, "~> 0.12.0"},
      {:erlcloud, "~> 0.13.6"},
-     {:jsx, "~> 2.8.0", override: true}]
+     {:jsx, "~> 2.8.0", override: true},
+     {:mock, "~> 0.1.1", only: :test}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

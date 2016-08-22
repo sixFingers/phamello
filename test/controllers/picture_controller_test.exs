@@ -1,7 +1,8 @@
 defmodule Phamello.PictureControllerTest do
   use Phamello.ConnCase
   import Phamello.Factory
-  alias Phamello.{Picture, Repo, User, StorageHelper}
+  alias Phamello.{Picture, Repo, User, StorageHelper, PictureWorker}
+  import Mock
 
   @invalid_attrs %{}
 
@@ -28,7 +29,10 @@ defmodule Phamello.PictureControllerTest do
     assert html_response(conn, 200) =~ "New picture"
   end
 
-  test "creates resource and redirects when data is valid", %{conn: conn, picture_map: picture_map} do
+  test_with_mock "creates resource and redirects when data is valid",
+    %{conn: conn, picture_map: picture_map},
+    PictureWorker, [], [handle_picture: fn(_) -> :ok end] do
+
     conn = post conn, picture_path(conn, :create), picture: picture_map
     assert redirected_to(conn) == picture_path(conn, :index)
 

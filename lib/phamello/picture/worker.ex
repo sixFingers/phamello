@@ -1,6 +1,9 @@
 defmodule Phamello.PictureWorker do
   use GenServer
-  alias Phamello.{Repo, Picture, PictureTasks}
+  alias Phamello.{Repo, Picture, S3Client, PictureTasks}
+  require Logger
+
+  @s3_upload_error_message "Error uploading to S3 with image id:"
 
   # Client
 
@@ -15,15 +18,17 @@ defmodule Phamello.PictureWorker do
   # Server
 
   def init([]) do
-    {:ok, [s3_client]}
+    {:ok, [S3Client.new]}
   end
 
   def handle_cast({:s3_upload_start, picture}, state) do
+    [client] = state
+
     Task.Supervisor.start_child(
       PictureSupervisor,
       PictureTasks,
       :upload_to_s3,
-      [__MODULE__, s3_client, s3_config[:bucket_name], picture]
+      [__MODULE__, client, S3Client.bucket, picture]
     )
 
     {:noreply, state}
@@ -34,10 +39,9 @@ defmodule Phamello.PictureWorker do
     changeset = Picture.update_changeset(picture, %{"remote_url" => remote_url})
 
     case Repo.update(changeset) do
-      {:ok, picture} ->
-        IO.puts "Picture updated"
-      {:error, changeset} ->
-        IO.puts "Picture error"
+      {:ok, _picture} -> :ok
+      {:error, _changeset} ->
+        Logger.error "#{@s3_upload_error_message} #{picture_id}"
     end
 
     {:noreply, state}
@@ -51,17 +55,5 @@ defmodule Phamello.PictureWorker do
   def handle_info(msg, state) do
     IO.puts("Info: #{msg}")
     {:noreply, state}
-  end
-
-  defp s3_client do
-    :erlcloud_s3.new(
-      s3_config[:aws_access_key_id],
-      s3_config[:aws_secret_access_key]
-    )
-  end
-
-  defp s3_config do
-    Application.get_env(:phamello, :s3_client)
-    |> Enum.map(fn({k, v}) -> {k, String.to_charlist(v)} end)
   end
 end
