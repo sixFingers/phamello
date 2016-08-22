@@ -33,8 +33,7 @@ defmodule Phamello.Router do
   scope "/app", Phamello do
     pipe_through [:browser, :browser_auth]
 
-    get "/", ApplicationController, :index
-    resources "/pictures", PictureController
+    resources "/", PictureController
   end
 
   scope "/", Phamello do

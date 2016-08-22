@@ -17,7 +17,6 @@
 
       <td class="text-right">
         <%= link "Show", to: picture_path(@conn, :show, picture), class: "btn btn-default btn-xs" %>
-        <%= link "Edit", to: picture_path(@conn, :edit, picture), class: "btn btn-default btn-xs" %>
         <%= link "Delete", to: picture_path(@conn, :delete, picture), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
       </td>
     </tr>
