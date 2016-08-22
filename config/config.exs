@@ -36,15 +36,16 @@ config :phamello, Phamello.Picture,
   storage_path: System.get_env("IMAGE_STORAGE_FOLDER"),
   max_file_size: 5_000_000
 
-config :phamello, :s3_client,
-  aws_access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
-  aws_secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
-  bucket_name: System.get_env("IMAGE_STORAGE_BUCKET")
-
 config :phamello, Phamello.S3Client,
   aws_access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
   aws_secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
   bucket_name: System.get_env("IMAGE_STORAGE_BUCKET")
+
+config :phamello, Phamello.TrelloClient,
+  api_key: System.get_env("TRELLO_API_KEY"),
+  api_token: System.get_env("TRELLO_API_TOKEN"),
+  board_name: System.get_env("TRELLO_BOARD_NAME"),
+  list_name: System.get_env("TRELLO_LIST_NAME")
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

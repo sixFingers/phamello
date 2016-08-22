@@ -9,6 +9,7 @@ defmodule Phamello.Picture do
     field :description, :string
     field :local_url, :string
     field :remote_url, :string
+    field :trello_url, :string
     field :image, :any, virtual: true
 
     belongs_to :user, Phamello.User
@@ -33,8 +34,7 @@ defmodule Phamello.Picture do
 
   def update_changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:remote_url])
-    |> validate_required([:remote_url])
+    |> cast(params, [:remote_url, :trello_url])
   end
 
   defp validate_image(changeset) do
