@@ -1,12 +1,14 @@
 defmodule Phamello.PictureControllerTest do
   use Phamello.ConnCase
   import Phamello.Factory
-  alias Phamello.{Picture, Repo, User}
+  alias Phamello.{Picture, Repo, User, StorageHelper}
 
   @invalid_attrs %{}
 
   setup do
     user = factory(:unsaved_user) |> Repo.insert!
+
+    on_exit fn -> StorageHelper.clear_fixtures_storage() end
 
     {:ok, %{
       picture_map: factory(:picture_map),
