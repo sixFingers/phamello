@@ -4,7 +4,8 @@ defmodule Phamello.PictureWorker do
   require Logger
 
   @s3_upload_error_message "Error uploading to S3 with image id:"
-  @trello_notify_error "error pushing to Trello image with id:"
+  @trello_notify_error_message "error pushing to Trello image with id:"
+  @picture_remove_error_message "error when removing image with id:"
 
   # Client
 
@@ -14,6 +15,10 @@ defmodule Phamello.PictureWorker do
 
   def handle_picture(%Picture{} = picture) do
     GenServer.cast(__MODULE__, {:s3_upload_start, picture})
+  end
+
+  def remove_picture(%Picture{} = picture) do
+    GenServer.cast(__MODULE__, {:picture_remove, picture})
   end
 
   # Server
@@ -78,7 +83,18 @@ defmodule Phamello.PictureWorker do
   end
 
   def handle_cast({:trello_notify_error, picture_id, error}, state) do
-    Logger.error "#{error} #{@trello_notify_error} #{picture_id}"
+    Logger.error "#{error} #{@trello_notify_error_message} #{picture_id}"
+    {:noreply, state}
+  end
+
+  def handle_cast({:picture_remove, picture}, state) do
+    result = File.rm(picture.local_url)
+
+    if result != :ok do
+      {:error, reason} = result
+      Logger.error "#{reason} #{@picture_remove_error_message} #{picture.id}"
+    end
+
     {:noreply, state}
   end
 

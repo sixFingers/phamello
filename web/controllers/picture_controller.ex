@@ -40,6 +40,7 @@ defmodule Phamello.PictureController do
 
   def delete(conn, %{"id" => id}, user, _claims) do
     picture = Repo.get!(assoc(user, :pictures), id)
+    PictureWorker.remove_picture(picture)
     Repo.delete!(picture)
 
     conn
