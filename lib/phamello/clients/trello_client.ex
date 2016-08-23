@@ -126,7 +126,7 @@ defmodule Phamello.TrelloClient do
   defp attachment_body(picture) do
     {:multipart, [
       {"name", picture.name},
-      {:file, picture.local_url}
+      {:file, Picture.get_local_path(picture)}
     ]}
   end
 end

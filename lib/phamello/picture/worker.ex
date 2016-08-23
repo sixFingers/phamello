@@ -73,7 +73,7 @@ defmodule Phamello.PictureWorker do
   def handle_cast({:trello_notify_complete, picture_id, card_url}, state) do
     picture = Picture |> Repo.get!(picture_id) |> Repo.preload(:user)
     changeset = Picture.update_changeset(picture, %{"trello_url" => card_url})
-    {status, data} = Repo.update(changeset)
+    {status, _changeset} = Repo.update(changeset)
 
     if status == :error do
       Logger.error "#{@s3_upload_error_message} #{picture_id}"
@@ -88,7 +88,7 @@ defmodule Phamello.PictureWorker do
   end
 
   def handle_cast({:picture_remove, picture}, state) do
-    result = File.rm(picture.local_url)
+    result = File.rm(Picture.get_local_path(picture))
 
     if result != :ok do
       {:error, reason} = result

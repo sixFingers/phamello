@@ -2,14 +2,15 @@ defmodule Phamello.S3Tasks do
   alias Phamello.{Picture, S3Client}
 
   def upload_to_s3(pid, client, bucket, %Picture{} = picture) do
-    path = picture.user_id
+    remote_path = picture.user_id
     |> Integer.to_charlist
     |> Path.join(Path.basename(picture.local_url))
     |> String.to_charlist
 
-    {:ok, binary} = File.read(picture.local_url)
+    local_path = Picture.get_local_path(picture)
+    {:ok, binary} = File.read(local_path)
 
-    case S3Client.put_object(bucket, path, binary, client) do
+    case S3Client.put_object(bucket, remote_path, binary, client) do
       {:error, _} -> bail_s3_upload(pid, picture.id)
       {:ok, url} -> confirm_s3_upload(pid, picture.id, url)
     end

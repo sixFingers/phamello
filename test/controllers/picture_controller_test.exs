@@ -38,7 +38,7 @@ defmodule Phamello.PictureControllerTest do
 
     picture = Repo.get_by(Picture, Map.take(picture_map, [:name, :description]))
     assert picture
-    assert File.exists?(picture.local_url)
+    assert File.exists?(Picture.get_local_path(picture))
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do
@@ -86,7 +86,7 @@ defmodule Phamello.PictureControllerTest do
     conn = delete conn, picture_path(conn, :delete, picture)
     assert redirected_to(conn) == picture_path(conn, :index)
     refute Repo.get(Picture, picture.id)
-    refute File.exists?(picture.local_url)
+    refute File.exists?(Picture.get_local_path(picture))
   end
 
   test "renders 404 when deleting resource not belonging to user", %{conn: conn, picture_map: picture_map} do

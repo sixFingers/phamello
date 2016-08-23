@@ -37,6 +37,11 @@ defmodule Phamello.Picture do
     |> cast(params, [:remote_url, :trello_url])
   end
 
+  def get_local_path(%__MODULE__{} = picture) do
+    config[:storage_path]
+    |> Path.join(picture.local_url)
+  end
+
   defp validate_image(changeset) do
     image = get_field(changeset, :image)
 
@@ -54,19 +59,20 @@ defmodule Phamello.Picture do
 
   defp persist_image(changeset) do
     image = get_field(changeset, :image)
-    path = image_path(changeset)
-    path |> Path.dirname() |> File.mkdir_p()
+    real_path = build_image_path(changeset)
+    real_path |> Path.dirname() |> File.mkdir_p()
+    db_path = Path.relative_to(real_path, config[:storage_path])
 
-    case File.copy(image.path, path) do
+    case File.copy(image.path, real_path) do
       {:ok, _bytes} -> changeset
-        |> put_change(:local_url, path)
+        |> put_change(:local_url, db_path)
         |> apply_changes
       {:error, _reason} -> changeset
         |> add_error(:image, @persistence_error_message)
     end
   end
 
-  defp image_path(changeset) do
+  defp build_image_path(changeset) do
     user_id = get_field(changeset, :user_id)
     image = get_field(changeset, :image)
     timestamp = current_timestamp()
