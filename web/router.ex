@@ -14,10 +14,6 @@ defmodule Phamello.Router do
     plug Guardian.Plug.LoadResource
   end
 
-  pipeline :authenticated do
-
-  end
-
   pipeline :api do
     plug :accepts, ["json"]
   end
