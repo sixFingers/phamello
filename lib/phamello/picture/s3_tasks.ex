@@ -3,9 +3,9 @@ defmodule Phamello.S3Tasks do
 
   def upload_to_s3(pid, bucket, %Picture{} = picture) do
     remote_path = picture.user_id
-    |> Integer.to_char_list
+    |> Integer.to_charlist
     |> Path.join(Path.basename(picture.local_url))
-    |> String.to_char_list
+    |> String.to_charlist
 
     local_path = Picture.get_local_path(picture)
     {:ok, binary} = File.read(local_path)
