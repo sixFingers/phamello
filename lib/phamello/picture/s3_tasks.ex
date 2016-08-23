@@ -3,7 +3,7 @@ defmodule Phamello.S3Tasks do
 
   def upload_to_s3(pid, bucket, %Picture{} = picture) do
     remote_path = picture.user_id
-    |> Integer.to_charlist
+    |> Integer.to_char_list
     |> Path.join(Path.basename(picture.local_url))
     |> String.to_charlist
 
