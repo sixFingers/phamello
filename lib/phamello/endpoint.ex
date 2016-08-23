@@ -13,8 +13,7 @@ defmodule Phamello.Endpoint do
 
   plug Plug.Static,
     at: "/images",
-    from: Phamello.Picture.config[:storage_path]
-      |> Path.expand,
+    from: System.get_env("IMAGE_STORAGE_FOLDER") |> Path.expand,
     gzip: false
 
   # Code reloading can be explicitly enabled under the
