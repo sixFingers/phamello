@@ -27,11 +27,16 @@ defmodule Phamello.TrelloClient do
     end
   end
 
-  defp do_create_attachment(%{"id" => id} = _card, picture) do
-    "#{@cards_path}/#{id}#{@card_attachments_path}"
+  defp do_create_attachment(%{"id" => id} = card, picture) do
+    response = "#{@cards_path}/#{id}#{@card_attachments_path}"
     |> full_url(auth_params)
     |> HTTPoison.post!(attachment_body(picture))
     |> parse_response
+
+    case response do
+      {:ok, _} -> {:ok, card}
+      {:error, error} -> {:error, error}
+    end
   end
 
   def do_create_base_card(list_id, picture) do

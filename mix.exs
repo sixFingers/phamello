@@ -22,7 +22,7 @@ defmodule Phamello.Mixfile do
   def application do
     [mod: {Phamello, []},
      applications: [:phoenix, :phoenix_pubsub, :phoenix_html, :cowboy, :logger, :gettext,
-                    :phoenix_ecto, :postgrex, :httpoison, :ssl, :erlcloud]]
+                    :phoenix_ecto, :postgrex, :httpoison, :ex_aws]]
   end
 
   # Specifies which paths to compile per environment.
@@ -44,8 +44,7 @@ defmodule Phamello.Mixfile do
      {:httpoison, "~> 0.9.0"},
      {:exvcr, "~> 0.7", only: :test},
      {:guardian, "~> 0.12.0"},
-     {:erlcloud, "~> 0.13.6"},
-     {:jsx, "~> 2.8.0", override: true},
+     {:ex_aws, "~> 1.0.0-beta1"},
      {:mock, "~> 0.1.1", only: :test}]
   end
 

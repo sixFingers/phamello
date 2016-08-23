@@ -24,17 +24,15 @@ defmodule Phamello.PictureWorker do
   # Server
 
   def init([]) do
-    {:ok, [S3Client.new]}
+    {:ok, []}
   end
 
   def handle_cast({:s3_upload_start, picture}, state) do
-    [client] = state
-
     Task.Supervisor.start_child(
       PictureSupervisor,
       S3Tasks,
       :upload_to_s3,
-      [__MODULE__, client, S3Client.bucket, picture]
+      [__MODULE__, S3Client.bucket, picture]
     )
 
     {:noreply, state}
