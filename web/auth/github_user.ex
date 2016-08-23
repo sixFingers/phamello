@@ -1,16 +1,14 @@
 defmodule Phamello.GithubUser do
   alias Phamello.{Repo, User}
 
-  defstruct [:username, :github_id]
-
-  def find_or_create(%__MODULE__{} = github_user) do
-    case Repo.get_by(User, github_id: github_user.github_id) do
+  def find_or_create(%{github_id: gid} = github_user) do
+    case Repo.get_by(User, github_id: gid) do
       %User{} = user -> {:logged_in, user}
       nil -> validate_new_user(github_user)
     end
   end
 
-  defp validate_new_user(%__MODULE__{} = github_user) do
+  defp validate_new_user(github_user) do
     changeset = User.creation_changeset(%User{}, github_user)
 
     case changeset.valid? do

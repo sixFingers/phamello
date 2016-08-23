@@ -4,8 +4,11 @@ defmodule Phamello.PictureController do
   alias Phamello.{Picture, PictureUploader, PictureWorker}
   import Ecto
 
+  plug Guardian.Plug.EnsureResource,
+      handler: Phamello.AuthController
+
   plug Guardian.Plug.EnsureAuthenticated,
-      handler: __MODULE__
+      handler: Phamello.AuthController
 
   def index(conn, _params, user, _claims) do
     pictures = Repo.all(assoc(user, :pictures))
@@ -46,12 +49,5 @@ defmodule Phamello.PictureController do
     conn
     |> put_flash(:info, "Picture deleted successfully.")
     |> redirect(to: picture_path(conn, :index))
-  end
-
-  def unauthenticated(conn, _params) do
-    conn
-    |> put_status(401)
-    |> put_flash(:error, "Authentication required")
-    |> redirect(to: "/")
   end
 end

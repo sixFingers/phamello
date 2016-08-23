@@ -1,6 +1,5 @@
 defmodule Phamello.GithubClient do
   use HTTPoison.Base
-  alias Phamello.GithubUser
 
   @site_url "https://api.github.com"
   @authorize_url "https://github.com/login/oauth/authorize"
@@ -39,7 +38,7 @@ defmodule Phamello.GithubClient do
   end
 
   defp handle_oauth_step(%{"login" => username, "id" => id}), do:
-    {:ok, %GithubUser{username: username, github_id: id}}
+    {:ok, %{username: username, github_id: id}}
 
   defp handle_oauth_step(_), do: {:error, nil}
 

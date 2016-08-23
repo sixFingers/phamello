@@ -20,7 +20,7 @@ defmodule Phamello.AuthController do
     redirect(conn, to: "/app")
   end
 
-  defp authentication_complete(conn, %GithubUser{} = user) do
+  defp authentication_complete(conn, user) do
     case GithubUser.find_or_create(user) do
       {:logged_in, user} -> authentication_success(conn, user)
       {:registered, user} -> registration_success(conn, user)
@@ -31,7 +31,7 @@ defmodule Phamello.AuthController do
   defp authentication_error(conn) do
     conn
     |> put_status(401)
-    |> put_flash(:errpr, "Couldn't authenticate.")
+    |> put_flash(:error, "Couldn't authenticate.")
     |> redirect(to: "/")
   end
 
@@ -47,5 +47,12 @@ defmodule Phamello.AuthController do
     |> Guardian.Plug.sign_in(user)
     |> put_flash(:info, "User succesfully registered")
     |> redirect(to: "/app")
+  end
+
+  def unauthenticated(conn, _params) do
+    conn
+    |> put_status(401)
+    |> put_flash(:error, "Authentication required")
+    |> redirect(to: "/")
   end
 end
