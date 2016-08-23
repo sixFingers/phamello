@@ -1,7 +1,7 @@
 use Mix.Config
 
 config :phamello, Phamello.Endpoint,
-  url: [scheme: "https", host: "mysterious-meadow-6277.herokuapp.com", port: 443],
+  url: [scheme: "https", host: "gentle-wildwood-53699.herokuapp.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
 config :hello_phoenix, HelloPhoenix.Repo,
