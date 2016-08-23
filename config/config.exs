@@ -34,12 +34,13 @@ config :guardian, Guardian,
 
 config :phamello, Phamello.Picture,
   storage_path: System.get_env("IMAGE_STORAGE_FOLDER"),
-  bucket_storage_path: System.get_env("IMAGE_STORAGE_BUCKET"),
+  bucket_name: System.get_env("IMAGE_STORAGE_BUCKET"),
   max_file_size: 5_000_000
 
 config :ex_aws, :s3,
   access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
-  secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY")
+  secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
+  region: System.get_env("AWS_REGION")
 
 config :phamello, Phamello.TrelloClient,
   api_key: System.get_env("TRELLO_API_KEY"),
