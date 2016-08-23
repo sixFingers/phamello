@@ -12,7 +12,9 @@
   <tbody>
 <%= for picture <- @pictures do %>
     <tr>
-      <td><%= static_path(@conn, "/#{picture.local_url}") %></td>
+      <td>
+        <img src="<%= picture_image_url(@conn, picture) %>" alt="">
+      </td>
       <td><%= picture.name %></td>
       <td><%= picture.description %></td>
 

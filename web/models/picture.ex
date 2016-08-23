@@ -37,6 +37,8 @@ defmodule Phamello.Picture do
     |> cast(params, [:remote_url, :trello_url])
   end
 
+  def config, do: Application.get_env(:phamello, __MODULE__)
+
   def get_local_path(%__MODULE__{} = picture) do
     config[:storage_path]
     |> Path.join(picture.local_url)
@@ -90,6 +92,4 @@ defmodule Phamello.Picture do
     {{y, m, d}, {h, mm, s}} = :calendar.universal_time
     "#{y}#{m}#{d}_#{h}#{mm}#{s}"
   end
-
-  defp config, do: Application.get_env(:phamello, __MODULE__)
 end

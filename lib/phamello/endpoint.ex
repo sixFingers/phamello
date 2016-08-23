@@ -13,7 +13,7 @@ defmodule Phamello.Endpoint do
 
   plug Plug.Static,
     at: "/images",
-    from: Application.get_env(:phamello, Phamello.Picture)[:storage_path]
+    from: Phamello.Picture.config[:storage_path]
       |> Path.expand,
     gzip: false
 
