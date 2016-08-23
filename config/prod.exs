@@ -1,6 +1,7 @@
 use Mix.Config
 
 config :phamello, Phamello.Endpoint,
+  http: [port: {:system, "PORT"}],
   url: [scheme: "https", host: "gentle-wildwood-53699.herokuapp.com", port: 443],
   force_ssl: [rewrite_on: [:x_forwarded_proto]]
 
