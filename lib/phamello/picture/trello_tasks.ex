@@ -2,7 +2,9 @@ defmodule Phamello.TrelloTasks do
   alias Phamello.{Picture, TrelloClient}
 
   def push_to_board(pid, %Picture{} = picture) do
-    case TrelloClient.create_card(picture) do
+    {:ok, binary} = File.read(picture.local_url)
+
+    case TrelloClient.create_card(picture, binary) do
       {:ok, %{"url" => url}} -> confirm_trello_push(pid, picture.id, url)
       {:error, error} -> bail_trello_push(pid, picture.id, error)
     end

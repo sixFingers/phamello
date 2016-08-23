@@ -4,19 +4,20 @@ defmodule Phamello.TrelloClient do
   @api_url "https://api.trello.com"
   @boards_path "/1/members/me"
   @cards_path "/1/cards"
+  @card_attachments_path "/attachments"
 
-  def create_card(%Picture{} = picture) do
-    case get_list_id(config[:board_name], config[:list_name]) do
-      {:ok, list_id} -> do_create_card(list_id, picture)
+  def create_card(%Picture{} = picture, file) do
+    case create_base_card(%Picture{} = picture) do
+      {:ok, card} -> do_create_attachment(card, picture, file)
       {:error, error} -> {:error, error}
     end
   end
 
-  def do_create_card(list_id, picture) do
-    @cards_path
-    |> full_url(card_params(list_id, picture))
-    |> HTTPoison.post!("")
-    |> parse_response
+  def create_base_card(%Picture{} = picture) do
+    case get_list_id(config[:board_name], config[:list_name]) do
+      {:ok, list_id} -> do_create_base_card(list_id, picture)
+      {:error, error} -> {:error, error}
+    end
   end
 
   def get_list_id(board, list) do
@@ -24,6 +25,20 @@ defmodule Phamello.TrelloClient do
       {:ok, boards} -> {:ok, do_get_list_id(boards, board, list)}
       {:error, error} -> {:error, error}
     end
+  end
+
+  defp do_create_attachment(%{"id" => id} = _card, picture, file) do
+    "#{@cards_path}/#{id}#{@card_attachments_path}"
+    |> full_url(auth_params)
+    |> HTTPoison.post!(attachment_body(picture, file))
+    |> parse_response
+  end
+
+  def do_create_base_card(list_id, picture) do
+    @cards_path
+    |> full_url(card_params(list_id, picture))
+    |> HTTPoison.post!("")
+    |> parse_response
   end
 
   def do_get_list_id(boards, board, list) do
@@ -104,7 +119,14 @@ defmodule Phamello.TrelloClient do
       "idList" => list_id,
       "name" => picture.name,
       "due" => picture.updated_at,
-      "desc" => "#{picture.user.username}\n#{picture.remote_url}"
+      "desc" => "#{picture.description}\n\n_#{picture.user.username}_"
     })
+  end
+
+  defp attachment_body(picture, file) do
+    {:multipart, [
+      {"name", picture.name},
+      {:file, picture.local_url}
+    ]}
   end
 end
