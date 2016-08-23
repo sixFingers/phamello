@@ -34,7 +34,7 @@ config :guardian, Guardian,
 
 config :phamello, Phamello.Picture,
   storage_path: System.get_env("IMAGE_STORAGE_FOLDER"),
-  bucket_storage_path: System.get_env("IMAGE_STORAGE_FOLDER"),
+  bucket_storage_path: System.get_env("IMAGE_STORAGE_BUCKET"),
   max_file_size: 5_000_000
 
 config :ex_aws, :s3,
