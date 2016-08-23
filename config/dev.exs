@@ -44,4 +44,3 @@ config :phamello, Phamello.Repo,
 config :phamello, Phamello.Picture,
   storage_path: "storage"
 
-import_config "dev.secret.exs"

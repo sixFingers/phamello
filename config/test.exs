@@ -21,5 +21,3 @@ config :phamello, Phamello.Repo,
 config :phamello, Phamello.Picture,
   storage_path: "fixture/storage",
   max_file_size: 200_000
-
-import_config "test.secret.exs"
