@@ -40,7 +40,3 @@ config :phamello, Phamello.Repo,
   database: "phamello_dev",
   hostname: "localhost",
   pool_size: 10
-
-config :phamello, Phamello.Picture,
-  storage_path: "storage"
-

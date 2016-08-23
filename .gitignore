@@ -31,3 +31,6 @@ erl_crash.dump
 
 # Storage
 /storage
+
+# Environment
+.env

@@ -12,7 +12,7 @@ config :phamello,
 # Configures the endpoint
 config :phamello, Phamello.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "WtximjVJudS7HBu9b7F1CXVQkroV4E0/gGXohu0D45EOYr/7R/fQO6xOIF7PJ+ad",
+  secret_key_base: System.get_env("SECRET_KEY_BASE"),
   render_errors: [view: Phamello.ErrorView, accepts: ~w(html json)],
   pubsub: [name: Phamello.PubSub,
            adapter: Phoenix.PubSub.PG2]
@@ -34,12 +34,12 @@ config :guardian, Guardian,
 
 config :phamello, Phamello.Picture,
   storage_path: System.get_env("IMAGE_STORAGE_FOLDER"),
+  bucket_storage_path: System.get_env("IMAGE_STORAGE_FOLDER"),
   max_file_size: 5_000_000
 
-config :phamello, Phamello.S3Client,
-  aws_access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
-  aws_secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
-  bucket_name: System.get_env("IMAGE_STORAGE_BUCKET")
+config :ex_aws, :s3,
+  access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
+  secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY")
 
 config :phamello, Phamello.TrelloClient,
   api_key: System.get_env("TRELLO_API_KEY"),
