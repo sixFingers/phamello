@@ -17,7 +17,7 @@ defmodule Phamello.PictureWorkerTest do
     }}
   end
 
-  test_with_mock "creation changeset with invalid attributes",
+  test_with_mock "S3 Task stores S3 url after image creation",
     %{user: user, picture_map: picture_map},
     TrelloTasks, [], [push_to_board: fn(_, __) -> :ok end] do
 
@@ -31,5 +31,20 @@ defmodule Phamello.PictureWorkerTest do
 
     picture = Repo.get!(Picture, picture.id)
     assert picture.remote_url == @fake_remote_url
+  end
+
+  test "Trello Task stores Trello card url after card creation",
+    %{user: user, picture_map: picture_map} do
+
+    picture = build_assoc(user, :pictures)
+    |> Picture.create_changeset(picture_map)
+    |> Repo.insert!
+
+    {:ok, state} = Phamello.PictureWorker.init([])
+
+    PictureWorker.handle_cast({:trello_notify_complete, picture.id, @fake_remote_url}, state)
+
+    picture = Repo.get!(Picture, picture.id)
+    assert picture.trello_url == @fake_remote_url
   end
 end

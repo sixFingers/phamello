@@ -6,9 +6,9 @@ defmodule Phamello.TrelloClient do
   @cards_path "/1/cards"
   @card_attachments_path "/attachments"
 
-  def create_card(%Picture{} = picture, file) do
+  def create_card(%Picture{} = picture) do
     case create_base_card(%Picture{} = picture) do
-      {:ok, card} -> do_create_attachment(card, picture, file)
+      {:ok, card} -> do_create_attachment(card, picture)
       {:error, error} -> {:error, error}
     end
   end
@@ -27,10 +27,10 @@ defmodule Phamello.TrelloClient do
     end
   end
 
-  defp do_create_attachment(%{"id" => id} = _card, picture, file) do
+  defp do_create_attachment(%{"id" => id} = _card, picture) do
     "#{@cards_path}/#{id}#{@card_attachments_path}"
     |> full_url(auth_params)
-    |> HTTPoison.post!(attachment_body(picture, file))
+    |> HTTPoison.post!(attachment_body(picture))
     |> parse_response
   end
 
@@ -123,7 +123,7 @@ defmodule Phamello.TrelloClient do
     })
   end
 
-  defp attachment_body(picture, file) do
+  defp attachment_body(picture) do
     {:multipart, [
       {"name", picture.name},
       {:file, picture.local_url}
