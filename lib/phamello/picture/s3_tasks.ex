@@ -5,7 +5,7 @@ defmodule Phamello.S3Tasks do
     remote_path = picture.user_id
     |> Integer.to_char_list
     |> Path.join(Path.basename(picture.local_url))
-    |> String.to_charlist
+    |> String.to_char_list
 
     local_path = Picture.get_local_path(picture)
     {:ok, binary} = File.read(local_path)
