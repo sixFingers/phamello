@@ -22,6 +22,11 @@ exports.config = {
     stylesheets: {
       joinTo: "css/app.css",
       order: {
+        before: [
+          "web/static/css/normalize.css",
+          "web/static/css/milligram.min.css",
+          "web/static/css/effects.css"
+        ],
         after: ["web/static/css/app.css"] // concat app.css last
       }
     },

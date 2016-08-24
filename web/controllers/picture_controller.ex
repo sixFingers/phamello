@@ -11,7 +11,12 @@ defmodule Phamello.PictureController do
       handler: Phamello.AuthController
 
   def index(conn, _params, user, _claims) do
-    pictures = Repo.all(assoc(user, :pictures))
+    query = from p in Picture,
+      join: u in assoc(p, :user),
+      where: u.id == ^(user.id),
+      order_by: [desc: p.updated_at]
+
+    pictures = Repo.all(query)
     render(conn, "index.html", pictures: pictures)
   end
 

@@ -45,7 +45,7 @@ defmodule Phamello.AuthController do
   defp registration_success(conn, %User{} = user) do
     conn
     |> Guardian.Plug.sign_in(user)
-    |> put_flash(:info, "User succesfully registered")
+    |> put_flash(:info, "Welcome #{user.username}!")
     |> redirect(to: "/app")
   end
 

@@ -1,30 +1,19 @@
-<h2>Listing pictures</h2>
-
-<table class="table">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Description</th>
-
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
+<%= if Enum.count(@pictures) == 0 do %>
+<p class="text-center">It looks like you haven't posted any picture yet!</p>
+<p class="text-center">
+  <%= link "Post a new picture", to: picture_path(@conn, :new), class: "button" %>
+</p>
+<%= else %>
+<div class="image-list">
 <%= for picture <- @pictures do %>
-    <tr>
-      <td>
-        <img src="" alt="" id="picture-<%= picture.id %>">
-      </td>
-      <td><%= picture.name %></td>
-      <td><%= picture.description %></td>
-
-      <td class="text-right">
-        <%= link "Show", to: picture_path(@conn, :show, picture), class: "btn btn-default btn-xs" %>
-        <%= link "Delete", to: picture_path(@conn, :delete, picture), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %>
-      </td>
-    </tr>
+  <div class="image-box" id="picture-<%= picture.id %>">
+    <img src="<%= if picture.remote_url, do: picture.remote_url, else: static_path(@conn, "/images/placeholder.png") %>">
+  </div>
+  <h3><%= picture.name %></h3>
+  <p><%= picture.description %></p>
+  <%= link "Remove this picture", to: picture_path(@conn, :delete, picture), method: :delete, data: [confirm: "Are you sure?"], class: "button" %>
 <% end %>
-  </tbody>
-</table>
+</div>
+<% end %>
 
-<%= link "New picture", to: picture_path(@conn, :new) %>
+

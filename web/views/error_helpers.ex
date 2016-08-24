@@ -8,9 +8,27 @@ defmodule Phamello.ErrorHelpers do
   @doc """
   Generates tag for inlined form input errors.
   """
+
   def error_tag(form, field) do
     if error = form.errors[field] do
       content_tag :span, translate_error(error), class: "help-block"
+    end
+  end
+
+  def error_tag(form, field, text) do
+    if error = form.errors[field] do
+      content_tag :span, text, class: "help-block"
+    end
+  end
+
+  def label_with_error(form, field), do:
+    label_with_error(form, field, humanize(field))
+
+  def label_with_error(form, field, text) do
+    if error = form.errors[field] do
+      label form, field, text, class: "error"
+    else
+      label form, field, text
     end
   end
 

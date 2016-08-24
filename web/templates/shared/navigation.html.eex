@@ -1,9 +1,16 @@
 <header class="header">
-  <nav role="navigation">
-    <ul class="nav nav-pills pull-right">
+  <nav class="navigation">
+    <a href="<%= page_path @conn, :welcome %>" id="logotype" class="hvr-buzz-out"></a>
+    <ul class="navigation-list">
       <%= if @current_user do %>
         <li>
-          <%= link "Logout", to: session_path(@conn, :logout), method: :delete %>
+          <%= link "My pictures", to: picture_path(@conn, :index) %>
+        </li>
+        <li>
+          <%= link "New picture", to: picture_path(@conn, :new) %>
+        </li>
+        <li>
+          <%= link "Signout", to: session_path(@conn, :logout), method: :delete %>
         </li>
       <%= else %>
         <li>
@@ -12,5 +19,4 @@
       <% end %>
     </ul>
   </nav>
-  <span class="logo"></span>
 </header>

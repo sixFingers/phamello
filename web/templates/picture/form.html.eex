@@ -1,29 +1,28 @@
+<%= if @changeset.action do %>
+<p class="alert form-alert">Oops, something went wrong! Please check the errors below.</p>
+<% end %>
+
 <%= form_for @changeset, @action, [multipart: true], fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
+  <fieldset class="file">
+    <div class="image-box">
+      <img src="" id="image-preview">
     </div>
-  <% end %>
+    <%= file_input f, :image %>
+    <%= label_with_error f, :image, "Select an image" %>
+    <%= error_tag f, :image, "You didn't select an image" %>
+  </fieldset>
 
-  <div class="form-group">
-    <%= label f, :image, class: "control-label" %>
-    <%= file_input f, :image, class: "form-control" %>
-    <%= error_tag f, :image %>
-  </div>
+  <fieldset>
+    <%= label_with_error f, :name %><%= error_tag f, :name %>
+    <%= text_input f, :name %>
+  </fieldset>
 
-  <div class="form-group">
-    <%= label f, :name, class: "control-label" %>
-    <%= text_input f, :name, class: "form-control" %>
-    <%= error_tag f, :name %>
-  </div>
+  <fieldset>
+    <%= label_with_error f, :description %><%= error_tag f, :description %>
+    <%= textarea f, :description %>
+  </fieldset>
 
-  <div class="form-group">
-    <%= label f, :description, class: "control-label" %>
-    <%= text_input f, :description, class: "form-control" %>
-    <%= error_tag f, :description %>
-  </div>
-
-  <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
-  </div>
+  <fieldset class="text-center">
+    <%= submit "Submit picture", class: "button" %>
+  </fieldset>
 <% end %>

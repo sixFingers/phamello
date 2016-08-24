@@ -13,6 +13,7 @@
     <% end %>
 
     <title>Hello Phamello!</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic">
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
 
@@ -21,7 +22,7 @@
       <%= render Phamello.SharedView, "navigation.html", current_user: current_user(@conn), conn: @conn %>
       <%= render Phamello.SharedView, "flash_data.html", conn: @conn %>
 
-      <main role="main">
+      <main class="main">
         <%= render @view_module, @view_template, assigns %>
       </main>
 
