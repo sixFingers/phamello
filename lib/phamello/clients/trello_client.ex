@@ -30,7 +30,7 @@ defmodule Phamello.TrelloClient do
   defp do_create_attachment(%{"id" => id} = card, picture) do
     response = "#{@cards_path}/#{id}#{@card_attachments_path}"
     |> full_url(auth_params)
-    |> HTTPoison.post!(attachment_body(picture))
+    |> HTTPoison.post!(attachment_body(picture), [], recv_timeout: 20000)
     |> parse_response
 
     case response do
@@ -42,7 +42,7 @@ defmodule Phamello.TrelloClient do
   def do_create_base_card(list_id, picture) do
     @cards_path
     |> full_url(card_params(list_id, picture))
-    |> HTTPoison.post!("")
+    |> HTTPoison.post!("", [], recv_timeout: 20000)
     |> parse_response
   end
 
@@ -70,7 +70,7 @@ defmodule Phamello.TrelloClient do
   defp fetch_boards do
     @boards_path
     |> full_url(boards_params)
-    |> HTTPoison.get!
+    |> HTTPoison.get!([], recv_timeout: 20000)
     |> parse_response
   end
 

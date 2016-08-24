@@ -44,7 +44,6 @@ defmodule Phamello.PictureWorker do
 
     case Repo.update(changeset) do
       {:ok, picture} ->
-        GenServer.cast(__MODULE__, {:browser_notify, picture})
         GenServer.cast(__MODULE__, {:trello_notify_start, picture})
       {:error, _changeset} ->
         Logger.error "#{@s3_upload_error_message} #{picture_id}"
@@ -82,6 +81,8 @@ defmodule Phamello.PictureWorker do
 
     if status == :error do
       Logger.error "#{@s3_upload_error_message} #{picture_id}"
+    else
+      GenServer.cast(__MODULE__, {:browser_notify, picture})
     end
 
     {:noreply, state}
