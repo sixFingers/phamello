@@ -13,7 +13,7 @@
 <%= for picture <- @pictures do %>
     <tr>
       <td>
-        <img src="<%= picture_image_url(@conn, picture) %>" alt="">
+        <img src="" alt="" id="picture-<%= picture.id %>">
       </td>
       <td><%= picture.name %></td>
       <td><%= picture.description %></td>

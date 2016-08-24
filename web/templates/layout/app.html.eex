@@ -7,6 +7,11 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <%= if Guardian.Plug.current_token(@conn) do %>
+    <meta name="guardian_token" content="<%= Guardian.Plug.current_token(@conn) %>">
+    <meta name="current_user" content="<%= current_user(@conn).id %>">
+    <% end %>
+
     <title>Hello Phamello!</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
   </head>
