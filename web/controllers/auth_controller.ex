@@ -3,7 +3,7 @@ defmodule Phamello.AuthController do
   alias Phamello.{GithubClient, GithubUser, User}
 
   plug Guardian.Plug.EnsureNotAuthenticated,
-      handler: __MODULE__
+    handler: __MODULE__
 
   def request(conn, _params) do
     redirect(conn, external: GithubClient.authorize_url)

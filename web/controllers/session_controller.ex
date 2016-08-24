@@ -2,7 +2,7 @@ defmodule Phamello.SessionController do
   use Phamello.Web, :controller
 
   plug Guardian.Plug.EnsureAuthenticated,
-      handler: __MODULE__
+    handler: __MODULE__
 
   def logout(conn, _params) do
     conn
