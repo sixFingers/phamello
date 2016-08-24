@@ -1,5 +1,14 @@
 # Phamello
 
+Phamello is an example of a **Ph**oenix + **Am**azon S3 + Tr**ello** integration.
+After having uploaded an image, this will be pushed to S3, then used to publish a card on Trello.
+Highlights:
+
+  * Authenticate through Github
+  * Persist the images _both_ on the application's host and on S3. Images on the application's host won't be removed after being pushed to S3 (although this can be easily tweaked)
+  * Uploading to S3 and publishing on Trello are both handled through asyncronous tasks, and orchestrated through a `GenServer`
+  * Tasks will notify the browser after completion (just in case you see the logotype buzzing)
+
 ## Configuration
 
 The application is setup to be easily deployable (in this case, to Heroku).
