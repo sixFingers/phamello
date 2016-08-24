@@ -1,20 +1,33 @@
 # Phamello
 
+## Configuration
+
+The application is setup to be easily deployable (in this case, to Heroku).
+For that reason, most of the configuration settings are setup through a `.env` file.
+Checkout `.env.example` for a complete list of required settings.
+
+  * Fill all of the required external credentials
+  * For `SECRET_KEY_BASE` and `GUARDIAN_SECRET_KEY` vars, you can easily generate a value with `mix phoenix.gen.secret`
+
+After creating your `.env` file, remember to `source` it before running any `iex` or `mix` related command.
+
+## Setup
+
 To start your Phoenix app:
 
   * Install dependencies with `mix deps.get`
   * Create and migrate your database with `mix ecto.create && mix ecto.migrate`
   * Install Node.js dependencies with `npm install`
-  * Start Phoenix endpoint with `mix phoenix.server`
+  * Start Phoenix endpoint with `mix phoenix.server` (rember to `source` your `.env` file!)
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
-Ready to run in production? Please [check our deployment guides](http://www.phoenixframework.org/docs/deployment).
+## Deploying
 
-## Learn more
+A deployable version is available in the branch `heroku-deploy`.
+Before deploying yourself, remember to change your app's `Endpoint` configuration in `config/prod.exs`.
+This should match your Heroku application's host:
 
-  * Official website: http://www.phoenixframework.org/
-  * Guides: http://phoenixframework.org/docs/overview
-  * Docs: https://hexdocs.pm/phoenix
-  * Mailing list: http://groups.google.com/group/phoenix-talk
-  * Source: https://github.com/phoenixframework/phoenix
+```
+url: [scheme: "https", host: "my-application-name.herokuapp.com", port: 443],
+```
