@@ -16,7 +16,7 @@ defmodule Phamello.ErrorHelpers do
   end
 
   def error_tag(form, field, text) do
-    if error = form.errors[field] do
+    if _error = form.errors[field] do
       content_tag :span, text, class: "help-block"
     end
   end
@@ -25,7 +25,7 @@ defmodule Phamello.ErrorHelpers do
     label_with_error(form, field, humanize(field))
 
   def label_with_error(form, field, text) do
-    if error = form.errors[field] do
+    if _error = form.errors[field] do
       label form, field, text, class: "error"
     else
       label form, field, text
