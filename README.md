@@ -2,6 +2,8 @@
 
 Phamello is an example of a **Ph**oenix + **Am**azon S3 + Tr**ello** integration.
 After having uploaded an image, this will be pushed to S3, then used to publish a card on Trello.
+A demo is currently available at [https://gentle-wildwood-53699.herokuapp.com/](https://gentle-wildwood-53699.herokuapp.com/)
+
 Highlights:
 
   * Authenticate through Github
