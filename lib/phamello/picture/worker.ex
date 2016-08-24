@@ -43,7 +43,8 @@ defmodule Phamello.PictureWorker do
     changeset = Picture.update_changeset(picture, %{"remote_url" => remote_url})
 
     case Repo.update(changeset) do
-      {:ok, _picture} ->
+      {:ok, picture} ->
+        GenServer.cast(__MODULE__, {:browser_notify, picture})
         GenServer.cast(__MODULE__, {:trello_notify_start, picture})
       {:error, _changeset} ->
         Logger.error "#{@s3_upload_error_message} #{picture_id}"
@@ -57,7 +58,13 @@ defmodule Phamello.PictureWorker do
     {:noreply, state}
   end
 
-  def handle_cast({:trello_notify_start, %Picture{} = picture}, state) do
+  def handle_cast({:browser_notify, picture}, state) do
+    Phamello.Endpoint.broadcast "user:#{picture.user_id}", "picture", %{id: picture.id, url: picture.remote_url}
+
+    {:noreply, state}
+  end
+
+  def handle_cast({:trello_notify_start, picture}, state) do
     Task.Supervisor.start_child(
       PictureSupervisor,
       TrelloTasks,
