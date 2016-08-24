@@ -41,11 +41,6 @@ defmodule Phamello.PictureController do
     end
   end
 
-  def show(conn, %{"id" => id}, user, _claims) do
-    picture = Repo.get!(assoc(user, :pictures), id)
-    render(conn, "show.html", picture: picture)
-  end
-
   def delete(conn, %{"id" => id}, user, _claims) do
     picture = Repo.get!(assoc(user, :pictures), id)
     PictureWorker.remove_picture(picture)

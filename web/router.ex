@@ -29,7 +29,7 @@ defmodule Phamello.Router do
   scope "/app", Phamello do
     pipe_through [:browser, :browser_auth]
 
-    resources "/", PictureController
+    resources "/", PictureController, only: [:index, :new, :create, :delete]
   end
 
   scope "/", Phamello do
