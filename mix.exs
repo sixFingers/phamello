@@ -45,7 +45,8 @@ defmodule Phamello.Mixfile do
      {:exvcr, "~> 0.7", only: :test},
      {:guardian, "~> 0.12.0"},
      {:ex_aws, "~> 1.0.0-beta1"},
-     {:mock, "~> 0.1.1", only: :test}]
+     {:mock, "~> 0.1.1", only: :test},
+     {:credo, "~> 0.3", only: [:dev, :test]}]
   end
 
   # Aliases are shortcuts or tasks specific to the current project.

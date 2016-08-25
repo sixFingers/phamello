@@ -19,6 +19,7 @@ Checkout `.env.example` for a complete list of required settings.
 
   * Fill all of the required external credentials
   * For `SECRET_KEY_BASE` and `GUARDIAN_SECRET_KEY` vars, you can easily generate a value with `mix phoenix.gen.secret`
+  * Create a folder for the local storage of uploaded files, being sure it corresponds to `IMAGE_STORAGE_FOLDER`
 
 After creating your `.env` file, remember to `source` it before running any `iex` or `mix` related command.
 
